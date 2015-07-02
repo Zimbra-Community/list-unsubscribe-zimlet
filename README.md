@@ -5,6 +5,17 @@ Implements an Unsubscribe button in Zimbra based on the List-Unsubscribe header
 as defined by http://www.list-unsubscribe.com/ or RFC 2369
 
 
+=== Install how-to ===
+
+Using development mode:
+
+mkdir -p /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_list_unsubscribe
+
+cd /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_list_unsubscribe
+
+wget https://raw.githubusercontent.com/barrydegraaff/list-unsubscribe-zimlet/master/tk_barrydegraaff_list_unsubscribe.xml
+
+wget https://raw.githubusercontent.com/barrydegraaff/list-unsubscribe-zimlet/master/tk_barrydegraaff_list_unsubscribe.js
 
 
 License
