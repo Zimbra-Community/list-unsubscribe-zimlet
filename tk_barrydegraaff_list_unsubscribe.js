@@ -28,10 +28,9 @@ tk_barrydegraaff_list_unsubscribe_HandlerObject.prototype.constructor = tk_barry
 
 /**
  * Simplify handler object
- *
  */
 var List_UnsubscribeZimlet = tk_barrydegraaff_list_unsubscribe_HandlerObject;
-
+ZmArchiveZimlet.OP_UNSUBSCRIBE = "OP_UNSUBSCRIBE";
 /**
  * Initializes the zimlet.
  */
@@ -49,55 +48,105 @@ function() {
 	ZmMailMsg.requestHeaders["List-Unsubscribe"] = "List-Unsubscribe";
 };
 
-List_UnsubscribeZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {  
-   if(appCtxt.getCurrentAppName()=='Mail')
-   {
-      //Remove Zimlets infobar from previous message
-      try {  
-      var elem = document.getElementById("tk_barrydegraaff_list_unsubscribe_actionbar");
-      elem.parentNode.removeChild(elem);   
-      } catch (err) {}
-   
-      //Create new empty infobar for display
-      var el = msgView.getHtmlElement();
-   
-      var g=document.createElement('div');
-      g.setAttribute("id", "tk_barrydegraaff_list_unsubscribe_actionbar");
-      el.insertBefore(g, el.firstChild);
+/*
+ *
+ */
+List_UnsubscribeZimlet.prototype.initializeToolbar =
+function(app, toolbar, controller, viewId) {
+   console.log(toolbar);
+   // bug fix #7192 - disable detach toolbar button
+   toolbar.enable(ZmOperation.DETACH_COMPOSE, false);   
+   if(viewId.indexOf("CLV-main") >=0){
+      if (toolbar.getButton('List_UnsubscribeZimletButton'))
+      {
+         //button already defined
+         return;
+      }
+      var buttonArgs = {
+         text    : 'Unsubscribe',
+         tooltip: 'Unsubscribe from mailing',
+         index: 8, //position of the button
+         image: "zimbraicon", //icon
+         enabled: false
+      };
+      var button = toolbar.createOp("List_UnsubscribeZimletButton", buttonArgs);
+      button.addSelectionListener(new AjxListener(this, this._handleList_UnsubscribeZimletMenuClick, controller));
+      //button.setEnabled(false);
+   }   
+};
 
-   }
-      
+List_UnsubscribeZimlet.prototype._handleList_UnsubscribeZimletMenuClick = function(controller) {
+	var items = controller.getSelection();
+	if(!items instanceof Array) {
+		this._showOneClickDlg("");
+		return;
+	}
+	var type = items[0].type;
+	var msg;
+	if (type == ZmId.ITEM_CONV) {
+		msg = items[0].getFirstHotMsg();
+	} else if(type == ZmId.ITEM_MSG) {
+		msg = items[0];
+	}
+
    try
    {
       if(msg.attrs['List-Unsubscribe'].indexOf('http') > 0)
       {
+         var listUnsubscribe = msg.attrs['List-Unsubscribe'];
 
-         if(document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar'))
+         var httpRegEx = new RegExp('(\<)(http.*?)(\>)');
+         var listUnsubscribeHttp = listUnsubscribe.match(httpRegEx)
+
+         var mailtoRegEx = new RegExp('(\<)(mailto.*?)(\>)');
+         var listUnsubscribemailto = listUnsubscribe.match(mailtoRegEx)
+
+         // window.open/location is a bit ugly,
+         // if you want to change this, please read the RFC: http://www.faqs.org/rfcs/rfc2369.html
+         // The below trick using ?view= also parses any subject that may be in the unsubscribe header,
+         // body of the mail is not implemented, as I don't think much systems use that.
+         if (listUnsubscribemailto) 
          {
-            if(document.getElementById('main_MSGC'+msg.id))
-            {               
-               var listUnsubscribe = msg.attrs['List-Unsubscribe'];
-
-               var httpRegEx = new RegExp('(\<)(http.*?)(\>)');
-               var listUnsubscribeHttp = listUnsubscribe.match(httpRegEx)
-
-               var mailtoRegEx = new RegExp('(\<)(mailto.*?)(\>)');
-               var listUnsubscribemailto = listUnsubscribe.match(mailtoRegEx)
-               
-               if(document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar'))
-               {
-                  if (listUnsubscribemailto) 
-                  {
-                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar').innerHTML = '<a target="_blank" href="?view=compose&to='+listUnsubscribemailto[0].replace(">","").replace("<","").replace("mailto:","").replace("?","&")+'">Unsubscribe</a>';
-                  }
-                  else if (listUnsubscribeHttp) 
-                  {      
-                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar').innerHTML = '<a target="_blank" href="'+listUnsubscribeHttp[0].replace(">","").replace("<","")+'">Unsubscribe</a>';
-                  }
-               }
-            }
+            window.location='?view=compose&to='+listUnsubscribemailto[0].replace(">","").replace("<","").replace("mailto:","").replace("?","&").replace("+","%2B");
+         }
+         else if (listUnsubscribeHttp) 
+         {      
+            window.open(listUnsubscribeHttp[0].replace(">","").replace("<",""));
          }
       }   
+   } catch (err)
+   {
+     // List-Unsubscribe header not found  
+   }
+};
+
+List_UnsubscribeZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {  
+   console.log(appCtxt.getAppViewMgr().getCurrentViewId());
+   try
+   {
+      if(msg.attrs['List-Unsubscribe'])
+      {
+         var listUnsubscribe = msg.attrs['List-Unsubscribe'];
+
+         var httpRegEx = new RegExp('(\<)(http.*?)(\>)');
+         var listUnsubscribeHttp = listUnsubscribe.match(httpRegEx)
+
+         var mailtoRegEx = new RegExp('(\<)(mailto.*?)(\>)');
+         var listUnsubscribemailto = listUnsubscribe.match(mailtoRegEx)
+         
+         if (listUnsubscribemailto || listUnsubscribeHttp) 
+         {      
+            console.log('true');
+         }
+         else
+         {
+            console.log('fasle');
+         }
+      }  
+      else
+      {
+         console.log('fasle2');
+      } 
    } catch (err)
    {
      // List-Unsubscribe header not found  
