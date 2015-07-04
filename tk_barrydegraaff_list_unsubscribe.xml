@@ -1,4 +1,4 @@
-<zimlet name="tk_barrydegraaff_list_unsubscribe" version="0.2" label="Display an Unsubscribe button in Zimbra based on the List-Unsubscribe header" description="Display an Unsubscribe button in Zimbra based on the List-Unsubscribe header" target="main view-window">
+<zimlet name="tk_barrydegraaff_list_unsubscribe" version="0.3" label="Display an Unsubscribe button in Zimbra based on the List-Unsubscribe header" description="Display an Unsubscribe button in Zimbra based on the List-Unsubscribe header" target="main view-window">
 	<include>tk_barrydegraaff_list_unsubscribe.js</include>
 	<handlerObject>tk_barrydegraaff_list_unsubscribe_HandlerObject</handlerObject>
 </zimlet>

@@ -41,47 +41,21 @@ function() {
 
 /**
  * Applies the request headers.
- * 
+ * Request Zimbra to expose "List-Unsubscribe" header to the Zimlet framework
  */
 List_UnsubscribeZimlet.prototype._applyRequestHeaders =
 function() {	
 	ZmMailMsg.requestHeaders["List-Unsubscribe"] = "List-Unsubscribe";
 };
 
-/*
- *
- */
-List_UnsubscribeZimlet.prototype.initializeToolbar =
-function(app, toolbar, controller, viewId) {
-   console.log(toolbar);
-   // bug fix #7192 - disable detach toolbar button
-   toolbar.enable(ZmOperation.DETACH_COMPOSE, false);   
-   if(viewId.indexOf("CLV-main") >=0){
-      if (toolbar.getButton('List_UnsubscribeZimletButton'))
-      {
-         //button already defined
-         return;
-      }
-      var buttonArgs = {
-         text    : 'Unsubscribe',
-         tooltip: 'Unsubscribe from mailing',
-         index: 8, //position of the button
-         image: "zimbraicon", //icon
-         enabled: false
-      };
-      var button = toolbar.createOp("List_UnsubscribeZimletButton", buttonArgs);
-      button.addSelectionListener(new AjxListener(this, this._handleList_UnsubscribeZimletMenuClick, controller));
-      //button.setEnabled(false);
-   }   
-};
-
 List_UnsubscribeZimlet.prototype._handleList_UnsubscribeZimletMenuClick = function(controller) {
-	var items = controller.getSelection();
+	//Get selected mail message
+   var items = controller.getSelection();
 	if(!items instanceof Array) {
-		this._showOneClickDlg("");
 		return;
 	}
-	var type = items[0].type;
+   
+   var type = items[0].type;
 	var msg;
 	if (type == ZmId.ITEM_CONV) {
 		msg = items[0].getFirstHotMsg();
@@ -89,66 +63,99 @@ List_UnsubscribeZimlet.prototype._handleList_UnsubscribeZimletMenuClick = functi
 		msg = items[0];
 	}
 
-   try
+   //Avoid type errors if no attrs of no List-Unsubscribe
+   try{
+      var attrs = msg.attrs['List-Unsubscribe'];
+   } catch (err) {}
+
+   if(attrs.indexOf('http') > 0)
    {
-      if(msg.attrs['List-Unsubscribe'].indexOf('http') > 0)
+      var listUnsubscribe = attrs;
+
+      var httpRegEx = new RegExp('(\<)(http.*?)(\>)');
+      var listUnsubscribeHttp = listUnsubscribe.match(httpRegEx)
+
+      var mailtoRegEx = new RegExp('(\<)(mailto.*?)(\>)');
+      var listUnsubscribemailto = listUnsubscribe.match(mailtoRegEx)
+
+      // window.open/location is a bit ugly,
+      // if you want to change this, please read the RFC: http://www.faqs.org/rfcs/rfc2369.html
+      // The below trick using ?view= also parses any subject that may be in the unsubscribe header,
+      // body of the mail is not implemented, as I don't think much systems use that.
+      if (listUnsubscribemailto) 
       {
-         var listUnsubscribe = msg.attrs['List-Unsubscribe'];
-
-         var httpRegEx = new RegExp('(\<)(http.*?)(\>)');
-         var listUnsubscribeHttp = listUnsubscribe.match(httpRegEx)
-
-         var mailtoRegEx = new RegExp('(\<)(mailto.*?)(\>)');
-         var listUnsubscribemailto = listUnsubscribe.match(mailtoRegEx)
-
-         // window.open/location is a bit ugly,
-         // if you want to change this, please read the RFC: http://www.faqs.org/rfcs/rfc2369.html
-         // The below trick using ?view= also parses any subject that may be in the unsubscribe header,
-         // body of the mail is not implemented, as I don't think much systems use that.
-         if (listUnsubscribemailto) 
-         {
-            window.location='?view=compose&to='+listUnsubscribemailto[0].replace(">","").replace("<","").replace("mailto:","").replace("?","&").replace("+","%2B");
-         }
-         else if (listUnsubscribeHttp) 
-         {      
-            window.open(listUnsubscribeHttp[0].replace(">","").replace("<",""));
-         }
-      }   
-   } catch (err)
-   {
-     // List-Unsubscribe header not found  
-   }
+         window.location='?view=compose&to='+listUnsubscribemailto[0].replace(">","").replace("<","").replace("mailto:","").replace("?","&").replace("+","%2B");
+      }
+      else if (listUnsubscribeHttp) 
+      {      
+         window.open(listUnsubscribeHttp[0].replace(">","").replace("<",""));
+      }
+   }   
 };
 
+/* We are create the toolbar button in onMsgView, normally this is done using initializeToolbar,
+ * but initializeToolbar is an event that is generated on various places in Zimbra (compose, etc)
+ * Since we only want to add the button in the Zimbra Message View, this is a lot safer.
+ * Also this avoids having to deal with multiple instances of toolbars and buttons.
+ * 
+ * */
 List_UnsubscribeZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {  
-   console.log(appCtxt.getAppViewMgr().getCurrentViewId());
-   try
+
+	var app = appCtxt.getCurrentApp();
+	var controller = app.getMailListController();
+	var toolbar = controller.getCurrentToolbar();
+   if (toolbar.getButton('List_UnsubscribeZimletButton'))
    {
-      if(msg.attrs['List-Unsubscribe'])
-      {
-         var listUnsubscribe = msg.attrs['List-Unsubscribe'];
+      //button already defined
+   }
+   else
+   {
+      //create app button
+      var buttonArgs = {
+         text    : 'Unsubscribe',
+         tooltip: 'Unsubscribe from mailing',
+         index: 8, //position of the button
+         image: "zimbraicon", //icon
+         enabled: true //default if undefined is true, defining it for documentation purpose
+      };
+      var button = toolbar.createOp("List_UnsubscribeZimletButton", buttonArgs);
+      button.addSelectionListener(new AjxListener(this, this._handleList_UnsubscribeZimletMenuClick, controller));
+   }   
 
-         var httpRegEx = new RegExp('(\<)(http.*?)(\>)');
-         var listUnsubscribeHttp = listUnsubscribe.match(httpRegEx)
+   //Avoid type errors if no attrs of no List-Unsubscribe
+   try{
+      var attrs = msg.attrs['List-Unsubscribe'];
+   } catch (err) {}
+   
+   //We have a List-Unsubscrib header
+   if (attrs)
+   {
+      var listUnsubscribe = msg.attrs['List-Unsubscribe'];
 
-         var mailtoRegEx = new RegExp('(\<)(mailto.*?)(\>)');
-         var listUnsubscribemailto = listUnsubscribe.match(mailtoRegEx)
-         
-         if (listUnsubscribemailto || listUnsubscribeHttp) 
-         {      
-            console.log('true');
-         }
-         else
-         {
-            console.log('fasle');
-         }
-      }  
+      var httpRegEx = new RegExp('(\<)(http.*?)(\>)');
+      var listUnsubscribeHttp = listUnsubscribe.match(httpRegEx)
+
+      var mailtoRegEx = new RegExp('(\<)(mailto.*?)(\>)');
+      var listUnsubscribemailto = listUnsubscribe.match(mailtoRegEx)
+      
+      //Enable/disable the Unsubscribe button
+      if (listUnsubscribemailto || listUnsubscribeHttp) 
+      {      
+         //The code below is already default behavior in Zimbra
+         //var button = toolbar.getButton('List_UnsubscribeZimletButton');  
+         //button.setEnabled(true); 
+      }
       else
       {
-         console.log('fasle2');
-      } 
-   } catch (err)
+         //This is actually an error, since there was some Unsubscribe header, but we could not regex it
+         var button = toolbar.getButton('List_UnsubscribeZimletButton');  
+         button.setEnabled(false); 
+         console.log("List_UnsubscribeZimlet: Warning regular expression failed to get http/mailto please report this bug at https://github.com/barrydegraaff/list-unsubscribe-zimlet/issues")
+      }
+   }  
+   else
    {
-     // List-Unsubscribe header not found  
+      var button = toolbar.getButton('List_UnsubscribeZimletButton');  
+      button.setEnabled(false);    
    }
 }
