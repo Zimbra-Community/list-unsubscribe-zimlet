@@ -4,6 +4,8 @@ Zimbra list-unsubscribe Zimlet
 Implements an Unsubscribe button in Zimbra based on the List-Unsubscribe header
 as defined by http://www.list-unsubscribe.com/ or RFC 2369
 
+Screenshot: https://raw.githubusercontent.com/barrydegraaff/list-unsubscribe-zimlet/master/list-unsubscribe.png
+
 If you find Zimbra OpenPGP Zimlet useful and want to support its continued development, you can make donations via:
 - PayPal: info@barrydegraaff.tk
 - Bitcoin: 1BaRRyS7wvGarEGgDwmPgRCygzcvocyxJt
