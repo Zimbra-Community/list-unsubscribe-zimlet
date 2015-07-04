@@ -30,7 +30,7 @@ tk_barrydegraaff_list_unsubscribe_HandlerObject.prototype.constructor = tk_barry
  * Simplify handler object
  */
 var List_UnsubscribeZimlet = tk_barrydegraaff_list_unsubscribe_HandlerObject;
-ZmArchiveZimlet.OP_UNSUBSCRIBE = "OP_UNSUBSCRIBE";
+
 /**
  * Initializes the zimlet.
  */
