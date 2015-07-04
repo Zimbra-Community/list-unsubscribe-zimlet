@@ -24,6 +24,7 @@ If you find Zimbra OpenPGP Zimlet useful and want to support its continued devel
 
 ### Installing in development mode:
 
+    rm -Rf /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_list_unsubscribe
     mkdir -p /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_list_unsubscribe
     cd /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_list_unsubscribe
     wget https://raw.githubusercontent.com/barrydegraaff/list-unsubscribe-zimlet/master/tk_barrydegraaff_list_unsubscribe.xml
