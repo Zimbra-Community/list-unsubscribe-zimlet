@@ -22,7 +22,7 @@ If you find Zimbra OpenPGP Zimlet useful and want to support its continued devel
     zmzimletctl deploy tk_barrydegraaff_list_unsubscribe.zip
     (wait 15 minutes for the deploy to propagate; or zmprov fc all && zmmailboxdctl restart)
 
-### InstallingUsing development mode:
+### Installing in development mode:
 
     mkdir -p /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_list_unsubscribe
     cd /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_list_unsubscribe
