@@ -68,7 +68,7 @@ List_UnsubscribeZimlet.prototype._handleList_UnsubscribeZimletMenuClick = functi
       var attrs = msg.attrs['List-Unsubscribe'];
    } catch (err) {}
 
-   if(attrs.indexOf('http') > 0)
+   if((attrs.indexOf('http') > 0) || (attrs.indexOf('mailto') > 0))
    {
       var listUnsubscribe = attrs;
 
