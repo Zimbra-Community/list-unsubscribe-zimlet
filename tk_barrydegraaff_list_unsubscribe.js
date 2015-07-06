@@ -101,27 +101,38 @@ List_UnsubscribeZimlet.prototype._handleList_UnsubscribeZimletMenuClick = functi
  * */
 List_UnsubscribeZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {  
 
-	var app = appCtxt.getCurrentApp();
-	var controller = app.getMailListController();
-	var toolbar = controller.getCurrentToolbar();
-   if (toolbar.getButton('List_UnsubscribeZimletButton'))
-   {
-      //button already defined
-   }
-   else
-   {
-      //create app button
-      var buttonArgs = {
-         text    : 'Unsubscribe',
-         tooltip: 'Unsubscribe from mailing',
-         index: 8, //position of the button
-         image: "zimbraicon", //icon
-         enabled: true //default if undefined is true, defining it for documentation purpose
-      };
-      var button = toolbar.createOp("List_UnsubscribeZimletButton", buttonArgs);
-      button.addSelectionListener(new AjxListener(this, this._handleList_UnsubscribeZimletMenuClick, controller));
-   }   
-
+   try {
+      var app = appCtxt.getCurrentApp();
+      var controller = app.getMailListController();
+      var toolbar = controller.getCurrentToolbar();
+      if (toolbar)
+      {
+         //When the user forwards emails as eml with attachments, there will be a toolbar, but that one
+         //has no getButton method... resulting in a pop-up where the attachments cannot be clicked
+         try {
+            var getButton = toolbar.getButton('List_UnsubscribeZimletButton')
+         } catch (err) {}
+         
+         if (getButton)
+         {
+            //button already defined
+         }
+         else
+         {
+            //create app button
+            var buttonArgs = {
+               text    : 'Unsubscribe',
+               tooltip: 'Unsubscribe from mailing',
+               index: 8, //position of the button
+               image: "zimbraicon", //icon
+               enabled: true //default if undefined is true, defining it for documentation purpose
+            };
+            var button = toolbar.createOp("List_UnsubscribeZimletButton", buttonArgs);
+            button.addSelectionListener(new AjxListener(this, this._handleList_UnsubscribeZimletMenuClick, controller));
+         }
+      }      
+   } catch (err) {}
+   
    //Avoid type errors if no attrs of no List-Unsubscribe
    try{
       var attrs = msg.attrs['List-Unsubscribe'];
@@ -155,7 +166,18 @@ List_UnsubscribeZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
    }  
    else
    {
-      var button = toolbar.getButton('List_UnsubscribeZimletButton');  
-      button.setEnabled(false);    
-   }
+      if (toolbar)
+      {
+         //When the user forwards emails as eml with attachments, there will be a toolbar, but that one
+         //has no getButton method... resulting in a pop-up where the attachments cannot be clicked
+         try {
+            var getButton = toolbar.getButton('List_UnsubscribeZimletButton')
+         } catch (err) {}
+         
+         if (getButton)
+         {
+            getButton.setEnabled(false);    
+         }
+      }
+   }   
 }
