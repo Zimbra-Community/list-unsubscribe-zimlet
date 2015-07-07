@@ -1,8 +1,11 @@
 Zimbra list-unsubscribe Zimlet
 ==========
 
-Implements an Unsubscribe button in Zimbra based on the List-Unsubscribe header
-as defined by http://www.list-unsubscribe.com/ or RFC 2369
+The Zimlet provides an unsubscribe button in your inbox to make it easier to unsubscribe from newsletters, social media notifications and other promotional emails.
+
+This will help you to keep your inbox clean! Please note that unsubscribing does not work for spam emails.
+
+The unsubscribe button in Zimbra is based on the List-Unsubscribe header as defined by http://www.list-unsubscribe.com/ or RFC 2369
 
 Screenshot: https://raw.githubusercontent.com/barrydegraaff/list-unsubscribe-zimlet/master/list-unsubscribe.png
 
