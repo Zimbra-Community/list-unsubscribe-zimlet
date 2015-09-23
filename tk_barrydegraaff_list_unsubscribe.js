@@ -113,7 +113,7 @@ List_UnsubscribeZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
             var getButton = toolbar.getButton('List_UnsubscribeZimletButton')
          } catch (err) {}
          
-         if (getButton)
+         if ((getButton) && (!getButton.isDisposed() ))
          {
             //button already defined
          }
@@ -176,6 +176,7 @@ List_UnsubscribeZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
          
          if (getButton)
          {
+            getButton.dispose();
             getButton.setEnabled(false);    
          }
       }
