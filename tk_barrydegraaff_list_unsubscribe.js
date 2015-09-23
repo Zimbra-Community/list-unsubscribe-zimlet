@@ -84,7 +84,7 @@ List_UnsubscribeZimlet.prototype._handleList_UnsubscribeZimletMenuClick = functi
       // body of the mail is not implemented, as I don't think much systems use that.
       if (listUnsubscribemailto) 
       {
-         window.location='?view=compose&to='+listUnsubscribemailto[0].replace(">","").replace("<","").replace("mailto:","").replace("?","&").replace("+","%2B");
+         window.location='?view=compose&to='+listUnsubscribemailto[0].replace(">","").replace("<","").replace("mailto:","").replace("?","&").replace(/\+/g,"%2B");
       }
       else if (listUnsubscribeHttp) 
       {      
