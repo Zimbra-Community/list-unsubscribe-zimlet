@@ -7,9 +7,11 @@ This will help you to keep your inbox clean! Please note that unsubscribing does
 
 The unsubscribe button in Zimbra is based on the List-Unsubscribe header as defined by http://www.list-unsubscribe.com/ or RFC 2369
 
+IN VERSION 0.6 THE UNSUBSCRIBE BUTTON IS HIDDEN WHEN NO HEADER IS PRESENT. In previous versions it showed disabled.
+
 Screenshot: https://raw.githubusercontent.com/barrydegraaff/list-unsubscribe-zimlet/master/list-unsubscribe.png
 
-If you find Zimbra OpenPGP Zimlet useful and want to support its continued development, you can make donations via:
+Do you like this Zimlet and want to support its continued development, you can make donations via:
 - PayPal: info@barrydegraaff.tk
 - Bank transfer: IBAN NL55ABNA0623226413 ; BIC ABNANL2A
 
