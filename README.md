@@ -9,7 +9,7 @@ The unsubscribe button in Zimbra is based on the List-Unsubscribe header as defi
 
 IN VERSION 0.6 THE UNSUBSCRIBE BUTTON IS HIDDEN WHEN NO HEADER IS PRESENT. In previous versions it showed disabled.
 
-Screenshot: https://raw.githubusercontent.com/barrydegraaff/list-unsubscribe-zimlet/master/list-unsubscribe.png
+Screenshot: https://raw.githubusercontent.com/Zimbra-Community/list-unsubscribe-zimlet/master/list-unsubscribe.png
 
 Do you like this Zimlet and want to support its continued development, you can make donations via:
 - PayPal: info@barrydegraaff.tk
@@ -31,8 +31,8 @@ Do you like this Zimlet and want to support its continued development, you can m
     rm -Rf /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_list_unsubscribe
     mkdir -p /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_list_unsubscribe
     cd /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_list_unsubscribe
-    wget https://raw.githubusercontent.com/barrydegraaff/list-unsubscribe-zimlet/master/tk_barrydegraaff_list_unsubscribe.xml
-    wget https://raw.githubusercontent.com/barrydegraaff/list-unsubscribe-zimlet/master/tk_barrydegraaff_list_unsubscribe.js
+    wget https://raw.githubusercontent.com/Zimbra-Community/list-unsubscribe-zimlet/master/tk_barrydegraaff_list_unsubscribe.xml
+    wget https://raw.githubusercontent.com/Zimbra-Community/list-unsubscribe-zimlet/master/tk_barrydegraaff_list_unsubscribe.js
 
 
 ========================================================================
