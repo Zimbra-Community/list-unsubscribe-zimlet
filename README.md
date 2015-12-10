@@ -22,7 +22,7 @@ Do you like this Zimlet and want to support its continued development, you can m
     su zimbra
     cd /tmp
     rm tk_barrydegraaff_list_unsubscribe*
-    wget https://github.com/barrydegraaff/list-unsubscribe-zimlet/raw/master/tk_barrydegraaff_list_unsubscribe.zip
+    wget https://github.com/Zimbra-Community/list-unsubscribe-zimlet/raw/master/tk_barrydegraaff_list_unsubscribe.zip
     zmzimletctl deploy tk_barrydegraaff_list_unsubscribe.zip
     (wait 15 minutes for the deploy to propagate; or zmprov fc all && zmmailboxdctl restart)
 

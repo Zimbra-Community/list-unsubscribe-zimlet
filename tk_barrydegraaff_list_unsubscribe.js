@@ -2,7 +2,7 @@
 This file is part of the list-unsubscribe Zimlet.
 Copyright (C) 2015  Barry de Graaff
 
-Bugs and feedback: https://github.com/barrydegraaff/list-unsubscribe-zimlet
+Bugs and feedback: https://github.com/Zimbra-Community/list-unsubscribe-zimlet
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -161,7 +161,7 @@ List_UnsubscribeZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
          //This is actually an error, since there was some Unsubscribe header, but we could not regex it
          var button = toolbar.getButton('List_UnsubscribeZimletButton');  
          button.setEnabled(false); 
-         console.log("List_UnsubscribeZimlet: Warning regular expression failed to get http/mailto please report this bug at https://github.com/barrydegraaff/list-unsubscribe-zimlet/issues")
+         console.log("List_UnsubscribeZimlet: Warning regular expression failed to get http/mailto please report this bug at https://github.com/Zimbra-Community/list-unsubscribe-zimlet/issues")
       }
    }  
    else
