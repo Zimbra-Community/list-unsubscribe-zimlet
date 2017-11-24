@@ -160,7 +160,8 @@ List_UnsubscribeZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
       {
          //This is actually an error, since there was some Unsubscribe header, but we could not regex it
          var button = toolbar.getButton('List_UnsubscribeZimletButton');  
-         button.setEnabled(false); 
+         button.dispose();
+	 button.setEnabled(false); 
          console.log("List_UnsubscribeZimlet: Warning regular expression failed to get http/mailto please report this bug at https://github.com/Zimbra-Community/list-unsubscribe-zimlet/issues")
       }
    }  
