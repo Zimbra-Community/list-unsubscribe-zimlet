@@ -11,10 +11,6 @@ IN VERSION 0.6 THE UNSUBSCRIBE BUTTON IS HIDDEN WHEN NO HEADER IS PRESENT. In pr
 
 Screenshot: https://raw.githubusercontent.com/Zimbra-Community/list-unsubscribe-zimlet/master/list-unsubscribe.png
 
-Do you like this Zimlet and want to support its continued development, you can make donations via:
-- PayPal: info@barrydegraaff.tk
-- Bank transfer: IBAN NL55ABNA0623226413 ; BIC ABNANL2A
-
 ========================================================================
 
 ### Installing
@@ -39,7 +35,7 @@ Do you like this Zimlet and want to support its continued development, you can m
 
 ### License
 
-Copyright (C) 2015  Barry de Graaff
+Copyright (C) 2015-2021  Barry de Graaff
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
